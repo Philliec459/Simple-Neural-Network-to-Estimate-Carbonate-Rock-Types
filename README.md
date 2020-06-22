@@ -21,8 +21,7 @@ The first part of this notebook develops our single layer neural network as insp
 https://www.youtube.com/watch?v=LSr96IZQknc
 
 We used Clerke's Rosetta Stone data and his PRTs as our training set, except that we combined all the macros PRTs into one RT that had a value of 2. We combined all the Type 1 Meso PRT into a RT with a value of 1 and all the Micro PRT compose our third RT with a value of 0. The following is a standard Sigmoid s-curve.
-![sigmoid.png](attachment:sigmoid.png)
-
+![TS_Image](sigmoid.png)
 We have expanded our Sigmoid curve for values from 0 to 2 to accomodate our RT.
  
         def sigmoid(x):
@@ -62,7 +61,7 @@ The final RT are defined as shown below:
         else:
             RT=1
             
-![pred.png](attachment:pred.png)
+![TS_Image](pred.png)
 
 
 1 Clerke, E. A., Mueller III, H. W., Phillips, E. C., Eyvazzadeh, R. Y., Jones, D. H., Ramamoorthy, R., Srivastava, A., (2008) “Application of Thomeer Hyperbolas to decode the pore systems, facies and reservoir properties of the Upper Jurassic Arab D Limestone, Ghawar field, Saudi Arabia: A Rosetta Stone approach”, GeoArabia, Vol. 13, No. 4, p. 113-160, October, 2008. 
