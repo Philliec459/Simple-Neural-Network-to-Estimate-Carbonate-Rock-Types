@@ -1,5 +1,5 @@
 # Simple-Neural-Network-to-Estimate-Rock-Types-Rock-Types
-We have developed a simple, 1 layer neural network to estimate Rock Types
+We have developed a simple, 1 layer neural network to estimate Macro, Meso and Micro Rock Types
 ### Introduction
 #### Predict Macro, Meso and Micro Rock Types (RT)
 The objective of this project is to estimate Macro, Meso and Micro Rock Types (RTs). In this repository we are using a simple this single layer neural network to predict our RT. Therefore, we modified the Petrophysical Rock Types (PRT) as defined by Clerke(1) for the Arab-D carbonate reservoir. The objective is to use just Porosity and Permeability to estimate our Macro, Meso or Micro RT.
@@ -20,8 +20,13 @@ The first part of this notebook develops our single layer neural network as insp
 
 https://www.youtube.com/watch?v=LSr96IZQknc
 
-We used Clerke's Rosetta Stone data and his PRTs as our training set, except that we combined all the macros PRTs into one RT that had a value of 1. We combined all the Type 1 Meso PRT into a RT with a value of 0.5 and all the Micro PRT compose our third RT with a value of 0. Our RT are values found on the Sigmoid s-curve.
+We used Clerke's Rosetta Stone data and his PRTs as our training set, except that we combined all the macros PRTs into one RT that had a value of 2. We combined all the Type 1 Meso PRT into a RT with a value of 1 and all the Micro PRT compose our third RT with a value of 0. The following is a standard Sigmoid s-curve.
 ![sigmoid.png](attachment:sigmoid.png)
+
+We have expanded our Sigmoid curve for values from 0 to 2 to accomodate our RT.
+ 
+        def sigmoid(x):
+            return 2/(1 + np.exp(-x))
 
 We first calculate a variable z which is a function if weights and bias:
         
@@ -43,11 +48,6 @@ For training we make about 1,000 iterations to optimize on the weights (w1 and w
 In this example z is calculated:
         
         z = porosity * weight1 + permeability * weight2 + bias
-        z = Porosity * -0.2064 + permeability * 1.47657 + 0.294
-
-where:
-    
-    w1 = -0.20645201368221652 , w2 = 1.4765787057977806 , bias = 0.2942818453339756
 
 and then pred is a function of sigmoid(z). 
         
@@ -55,12 +55,12 @@ and then pred is a function of sigmoid(z).
 
 The final RT are defined as shown below:
         
-        if pred > 0.85:
-            RT=1
-        elif pred < 0.2:
+        if pred > 1.7:
+            RT=2
+        elif pred < 0.25:
             RT=0
         else:
-            RT=0.5
+            RT=1
             
 ![pred.png](attachment:pred.png)
 
