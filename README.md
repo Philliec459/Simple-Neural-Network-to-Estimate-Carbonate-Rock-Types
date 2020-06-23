@@ -20,9 +20,9 @@ The first part of this notebook develops our single layer neural network as insp
 
 https://www.youtube.com/watch?v=LSr96IZQknc
 
-We used Clerke's Rosetta Stone data and his PRTs as our training set, except that we combined all the macros PRTs into one RT that had a value of 2. We combined all the Type 1 Meso PRT into a RT with a value of 1 and all the Micro PRT compose our third RT with a value of 0. The following is a standard Sigmoid s-curve.
+We have used Clerke's Rosetta Stone data and his PRTs as our training set, except that we combined all the macros PRTs into one RT that had a value of 2. We combined all the Type 1 Meso PRT into a RT with a value of 1 and all the Micro PRT compose our third RT with a value of 0. The following is a standard Sigmoid s-curve.
 ![TS_Image](sigmoid.png)
-We have expanded our Sigmoid curve for values from 0 to 2 to accomodate our RT.
+We have expanded our Sigmoid curve for values from 0 to 2 to accomodate our 3 RTs at 0, 1 and 2.
  
         def sigmoid(x):
             return 2/(1 + np.exp(-x))
@@ -38,21 +38,83 @@ Our prediction (pred) is then a function of sigmoid:
 where sigmoid is defined by:
         
         def sigmoid(x):
-            return 1/(1 + np.exp(-x))
+            return 2/(1 + np.exp(-x))
 
 The term z is actually the x-axis on the above sigmoid curve, and y is a function of sigmoid(z). 
 
 For training we make about 1,000 iterations to optimize on the weights (w1 and w2) and bias for our single layer. These weights can be saved and then used in future projects to estimate RT from the user's input of Porosity and log10 of Permeability. We can calculates the most probable Rock Type and even provide Capillary Pressure curves for each Rock Type.
 
-In this example z is calculated:
-        
-        z = porosity * weight1 + permeability * weight2 + bias
+The following is the training loop. 
 
-and then pred is a function of sigmoid(z). 
-        
-        pred = sigmoid(z) 
+     # Start the training loop
+     learning_rate = 0.1
+     costs = []
+     cost_all = []
 
-The final RT are defined as shown below:
+     w1 = np.random.randn()
+     w2 = np.random.randn()
+     b  = np.random.randn()
+
+     # Save weights from previous run. These can be loaded to continue from there
+     #w1 = 21.5
+     #w2 = 10.5
+     #b  = -77
+
+     for i in range(1000):
+         ri = np.random.randint(len(data))
+         point = data[ri]
+
+         z = point[0]*w1 + point[1]*w2 + b
+         pred = sigmoid(z)
+
+         target = point[2]
+         cost = np.square(pred - target)
+
+         cost_all.append(cost)
+
+         ###costs.append(cost)
+
+         #derivatives
+         dcost_pred = 2 * (pred - target)
+         dpred_dz   = sigmoid_p(z)
+         dz_dw1 = point[0]
+         dz_dw2 = point[1]
+         dz_db  = 1
+
+         dcost_dw1 = dcost_pred * dpred_dz * dz_dw1
+         dcost_dw2 = dcost_pred * dpred_dz * dz_dw2
+         dcost_db  = dcost_pred * dpred_dz * dz_db
+
+         w1 = w1 - learning_rate * dcost_dw1
+         w2 = w2 - learning_rate * dcost_dw2
+         b  = b  - learning_rate * dcost_db
+
+         if i % 100==0:
+             cost_sum = 0
+             for j in range(len(data)):
+                 point = data[j]
+
+                 z = point[0]*w1 + point[1]*w2 + b
+                 pred = sigmoid(z)
+
+                 target=point[2]
+                 cost_sum += np.square(pred - target)
+
+             costs.append(cost_sum/len(data))
+             #costs.append(cost_sum)
+
+
+To make a prediction we would use code similar to the following where we first compute z based on the product of our inputs and weights:
+
+     for i in range(len(data)):
+         point = data[i]
+         z = point[0] * w1 + point[1]* w2 + b
+         pred = sigmoid(z)
+         print("PRT:", point[2],",", "pred: {}".format(pred))
+
+and then we predict where we are in the sigmoid curve scaled from 0 to 2 (pred = sigmoid(z).  
+
+The final RT are then defined as shown below:
         
         if pred > 1.7:
             RT=2
@@ -62,6 +124,8 @@ The final RT are defined as shown below:
             RT=1
             
 ![TS_Image](pred.png)
+
+For nearly 300 samples, we have predicted the correct RT for all by 6-7 samples. As they say, simplicity is the best design. 
 
 
 1 Clerke, E. A., Mueller III, H. W., Phillips, E. C., Eyvazzadeh, R. Y., Jones, D. H., Ramamoorthy, R., Srivastava, A., (2008) “Application of Thomeer Hyperbolas to decode the pore systems, facies and reservoir properties of the Upper Jurassic Arab D Limestone, Ghawar field, Saudi Arabia: A Rosetta Stone approach”, GeoArabia, Vol. 13, No. 4, p. 113-160, October, 2008. 
