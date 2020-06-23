@@ -112,7 +112,7 @@ To make a prediction we would use code similar to the following where we first c
          pred = sigmoid(z)
          print("PRT:", point[2],",", "pred: {}".format(pred))
 
-and then we predict where we are in the sigmoid curve scaled from 0 to 2 (pred = sigmoid(z).  
+and then we predict where we are in the sigmoid curve scaled from 0 to 2 (pred = sigmoid(z)).  
 
 The final RT are then defined as shown below:
         
@@ -125,7 +125,7 @@ The final RT are then defined as shown below:
             
 ![TS_Image](pred.png)
 
-For nearly 300 samples, we have predicted the correct RT for all by 6-7 samples. As they say, simplicity is the best design. 
+For nearly 300 samples, we have predicted the correct RT for all by 8 samples using the RT cutoffs shown above. The cutoffs can be varied a bit to improve upon our RT estimations. As they say, simplicity is the best design. 
 
 
 1 Clerke, E. A., Mueller III, H. W., Phillips, E. C., Eyvazzadeh, R. Y., Jones, D. H., Ramamoorthy, R., Srivastava, A., (2008) “Application of Thomeer Hyperbolas to decode the pore systems, facies and reservoir properties of the Upper Jurassic Arab D Limestone, Ghawar field, Saudi Arabia: A Rosetta Stone approach”, GeoArabia, Vol. 13, No. 4, p. 113-160, October, 2008. 
