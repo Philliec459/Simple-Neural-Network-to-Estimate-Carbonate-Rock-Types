@@ -20,8 +20,10 @@ The first part of this notebook develops our single layer neural network as insp
 
 https://www.youtube.com/watch?v=LSr96IZQknc
 
-We have used Clerke's Rosetta Stone data and his PRTs as our training set, except that we combined all the macros PRTs into one RT that had a value of 2. We combined all the Type 1 Meso PRT into a RT with a value of 1 and all the Micro PRT compose our third RT with a value of 0. The following is a standard Sigmoid s-curve.
+We have used Clerke's Rosetta Stone data and his PRTs as our training set, except that we combined all the macros PRTs into one RT that had a value of 2. We combined all the Type 1 Meso PRT into a RT with a value of 1 and all the Micro PRT compose our third RT with a value of 0. The following is the Sigmoid s-curve that we are using
+
 ![TS_Image](sigmoid.png)
+
 We have expanded our Sigmoid curve for values from 0 to 2 to accomodate our 3 RTs at 0, 1 and 2.
  
         def sigmoid(x):
@@ -112,11 +114,11 @@ To make a prediction we would use code similar to the following where we first c
          pred = sigmoid(z)
          print("PRT:", point[2],",", "pred: {}".format(pred))
 
-and then we predict where we are in the sigmoid curve scaled from 0 to 2 (pred = sigmoid(z)).  
+and then we predict where we are in the sigmoid curve scaled from 0 to 2 (pred = sigmoid(z).  
 
 The final RT are then defined as shown below:
         
-        if pred > 1.7:
+        if pred > 1.56:
             RT=2
         elif pred < 0.25:
             RT=0
@@ -125,7 +127,7 @@ The final RT are then defined as shown below:
             
 ![TS_Image](pred.png)
 
-For nearly 300 samples, we have predicted the correct RT for all by 8 samples using the RT cutoffs shown above. The cutoffs can be varied a bit to improve upon our RT estimations. As they say, simplicity is the best design. 
+For nearly 300 samples, we have accurately predicted the correct RT for all by 6-7 samples using the RT cutoffs shown above. The cutoffs can be varied a bit to improve upon our RT estimations. As they say, simplicity is the best design. 
 
 
 1 Clerke, E. A., Mueller III, H. W., Phillips, E. C., Eyvazzadeh, R. Y., Jones, D. H., Ramamoorthy, R., Srivastava, A., (2008) “Application of Thomeer Hyperbolas to decode the pore systems, facies and reservoir properties of the Upper Jurassic Arab D Limestone, Ghawar field, Saudi Arabia: A Rosetta Stone approach”, GeoArabia, Vol. 13, No. 4, p. 113-160, October, 2008. 
